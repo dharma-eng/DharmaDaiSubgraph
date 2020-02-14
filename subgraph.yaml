@@ -1,0 +1,42 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: DharmaDai
+    network: mainnet
+    source:
+      address: '0x00000000001876eB1444c986fD502e618c587430'
+      abi: DharmaDai
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - Approval
+        - Mint
+        - Redeem
+        - Accrue
+        - CollectSurplus
+        - Summary
+        - Account
+      abis:
+        - name: DharmaDai
+          file: ./abis/DharmaDai.json
+      #blockHandlers:
+      #  - handler: handleBlock
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: Mint(address,uint256,uint256)
+          handler: handleMint
+        - event: Redeem(address,uint256,uint256)
+          handler: handleRedeem
+        - event: Accrue(uint256,uint256)
+          handler: handleAccrue
+        - event: CollectSurplus(uint256,uint256)
+          handler: handleCollectSurplus
+      file: ./src/mapping.ts

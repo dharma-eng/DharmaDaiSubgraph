@@ -1,0 +1,70 @@
+type Transfer @entity {
+  id: ID!
+  from: Bytes! # address
+  to: Bytes! # address
+  value: BigInt! # uint256
+  underlyingAmount: BigInt! # uint256
+}
+
+type Approval @entity {
+  id: ID!
+  owner: Bytes! # address
+  spender: Bytes! # address
+  value: BigInt! # uint256
+}
+
+type Mint @entity {
+  id: ID!
+  minter: Bytes! # address
+  dai: BigInt! # uint256
+  dDai: BigInt! # uint256
+}
+
+type Redeem @entity {
+  id: ID!
+  redeemer: Bytes! # address
+  dai: BigInt! # uint256
+  dDai: BigInt! # uint256
+}
+
+type Accrue @entity {
+  id: ID!
+  dDaiExchangeRate: BigInt! # uint256
+  cDaiExchangeRate: BigInt! # uint256
+}
+
+type CollectSurplus @entity {
+  id: ID!
+  dai: BigInt! # uint256
+  cDai: BigInt! # uint256
+}
+
+type Summary @entity {
+  id: ID! # block number
+  version: BigInt! # uint256
+  totalSupply: BigInt! # uint256
+  totalSupplyUnderlying: BigInt! # uint256
+  exchangeRate: BigInt! # uint256
+  supplyRatePerBlock: BigInt! # uint256
+  totalInterestEarned: BigInt! # uint256
+  lastAccrual: BigInt! # uint256
+  spreadPerBlock: BigInt! # uint256
+  currentCDaiSurplus: BigInt! # uint256
+  currentDaiSurplus: BigInt! # uint256
+  cumulativeCDaiSurplus: BigInt! # uint256
+  cumulativeDaiSurplus: BigInt! # uint256
+}
+
+type Account @entity {
+  id: ID! # address
+  balance: BigInt! # uint256
+  balanceUnderlying: BigInt! # uint256
+  totalInterestEarned: BigInt! # uint256
+  transfersIn: [Transfer!]! @derivedFrom(field: "to")
+  transfersOut: [Transfer!]! @derivedFrom(field: "from")
+  mintEvents: [Mint!]! @derivedFrom(field: "minter")
+  redeemEvents: [Redeem!]! @derivedFrom(field: "redeemer")
+  allowances: [Approval!]! @derivedFrom(field: "spender")
+  approvals: [Approval!]! @derivedFrom(field: "owner")
+  lastAction: BigInt! # uint256
+}
