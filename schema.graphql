@@ -1,28 +1,28 @@
 type Transfer @entity {
   id: ID!
-  from: Bytes! # address
-  to: Bytes! # address
+  from: Account! # address
+  to: Account! # address
   value: BigInt! # uint256
   underlyingAmount: BigInt! # uint256
 }
 
 type Approval @entity {
   id: ID!
-  owner: Bytes! # address
-  spender: Bytes! # address
+  owner: Account! # address
+  spender: Account! # address
   value: BigInt! # uint256
 }
 
 type Mint @entity {
   id: ID!
-  minter: Bytes! # address
+  minter: Account! # address
   dai: BigInt! # uint256
   dDai: BigInt! # uint256
 }
 
 type Redeem @entity {
   id: ID!
-  redeemer: Bytes! # address
+  redeemer: Account! # address
   dai: BigInt! # uint256
   dDai: BigInt! # uint256
 }

@@ -1,4 +1,4 @@
-specVersion: 0.0.1
+specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
@@ -27,9 +27,9 @@ dataSources:
       #blockHandlers:
       #  - handler: handleBlock
       eventHandlers:
-        - event: Transfer(indexed address,indexed address,indexed uint256)
+        - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-        - event: Approval(indexed address,indexed address,indexed uint256)
+        - event: Approval(indexed address,indexed address,uint256)
           handler: handleApproval
         - event: Mint(address,uint256,uint256)
           handler: handleMint
