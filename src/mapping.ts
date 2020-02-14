@@ -39,16 +39,15 @@ export function handleTransfer(event: TransferEvent): void {
   if (accountIn === null) {
     accountIn = new Account(event.params.to.toHex());
     accountIn.totalInterestEarned = BigInt.fromI32(0);
-    accountIn.balance = event.params.value;
   } else {
     accountIn.totalInterestEarned = accountIn.totalInterestEarned.plus(
       (
         (accountIn.balance.times(exchangeRate)).div(BigInt.fromI32(1000000000).times(BigInt.fromI32(1000000000)))
       ).minus(accountIn.balanceUnderlying)
     );
-    accountIn.balance = accountIn.balance.plus(event.params.value);
   }
 
+  accountIn.balance = contract.balanceOf(event.params.to);
   accountIn.balanceUnderlying = contract.balanceOfUnderlying(event.params.to);
   accountIn.lastAction = event.block.number;
   accountIn.save();
@@ -57,16 +56,16 @@ export function handleTransfer(event: TransferEvent): void {
   if (accountOut === null) {
     accountOut = new Account(event.params.from.toHex());
     accountOut.totalInterestEarned = BigInt.fromI32(0);
-    accountOut.balance = contract.balanceOf(event.params.from);
   } else {
     accountOut.totalInterestEarned = accountOut.totalInterestEarned.plus(
       (
         (accountOut.balance.times(exchangeRate)).div(BigInt.fromI32(1000000000).times(BigInt.fromI32(1000000000)))
       ).minus(accountOut.balanceUnderlying)
     );
-    accountOut.balance = accountOut.balance.minus(event.params.value);
+    ;
   }
 
+  accountOut.balance = contract.balanceOf(event.params.from);
   accountOut.balanceUnderlying = contract.balanceOfUnderlying(event.params.from);
   accountOut.lastAction = event.block.number;
   accountOut.save();
