@@ -1,5 +1,5 @@
 {
-  "name": "dharmadai",
+  "name": "DharmaDaiSubgraph",
   "license": "MIT",
   "scripts": {
     "codegen": "graph codegen",
@@ -10,8 +10,7 @@
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 0age/dharmadai"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.13.3",
-    "@graphprotocol/graph-ts": "0.13.0",
-    "lodash": "^4.17.11"
+    "@graphprotocol/graph-ts": "0.17.0",
+    "lodash": "4.17.11"
   }
 }

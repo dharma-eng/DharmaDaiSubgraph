@@ -31,14 +31,9 @@ export function handleTransfer(event: TransferEvent): void {
   let entity = new Transfer(
     event.transaction.hash.toHex() + '-' + event.logIndex.toString()
   );
-  entity.from = event.params.from;
-  entity.to = event.params.to;
-  entity.value = event.params.value;
 
   let contract = DharmaDai.bind(event.address);
   let exchangeRate = contract.exchangeRateCurrent();
-  entity.underlyingValue = (event.params.value.times(exchangeRate)).dividedBy(BigInt.fromI32(10).pow(18));
-  entity.save();
 
   let accountIn = Account.load(event.params.to.toHex());
   if (accountIn === null) {
@@ -48,7 +43,7 @@ export function handleTransfer(event: TransferEvent): void {
   } else {
     accountIn.totalInterestEarned = accountIn.totalInterestEarned.plus(
       (
-        (accountIn.balance.times(exchangeRate)).dividedBy(BigInt.fromI32(10).pow(18))
+        (accountIn.balance.times(exchangeRate)).div(BigInt.fromI32(1000000000).times(BigInt.fromI32(1000000000)))
       ).minus(accountIn.balanceUnderlying)
     );
     accountIn.balance = accountIn.balance.plus(event.params.value);
@@ -66,7 +61,7 @@ export function handleTransfer(event: TransferEvent): void {
   } else {
     accountOut.totalInterestEarned = accountOut.totalInterestEarned.plus(
       (
-        (accountOut.balance.times(exchangeRate)).dividedBy(BigInt.fromI32(10).pow(18))
+        (accountOut.balance.times(exchangeRate)).div(BigInt.fromI32(1000000000).times(BigInt.fromI32(1000000000)))
       ).minus(accountOut.balanceUnderlying)
     );
     accountOut.balance = accountOut.balance.minus(event.params.value);
@@ -75,6 +70,12 @@ export function handleTransfer(event: TransferEvent): void {
   accountOut.balanceUnderlying = contract.balanceOfUnderlying(event.params.from);
   accountOut.lastAction = event.block.number;
   accountOut.save();
+
+  entity.from = accountOut.id;
+  entity.to = accountIn.id;
+  entity.value = event.params.value;
+  entity.underlyingAmount = (event.params.value.times(exchangeRate)).div(BigInt.fromI32(1000000000).times(BigInt.fromI32(1000000000)));
+  entity.save();
 
   log.debug(
     'tx {} => Transfer: from 0x{} to 0x{}',
@@ -90,8 +91,31 @@ export function handleApproval(event: ApprovalEvent): void {
   let entity = new Approval(
     event.transaction.hash.toHex() + '-' + event.logIndex.toString()
   );
-  entity.owner = event.params.owner;
-  entity.spender = event.params.spender;
+
+  let contract = DharmaDai.bind(event.address);
+
+  let owner = Account.load(event.params.owner.toHex());
+  if (owner === null) {
+    owner = new Account(event.params.owner.toHex());
+    owner.totalInterestEarned = BigInt.fromI32(0);
+    owner.balance = contract.balanceOf(event.params.owner);
+    owner.balanceUnderlying = contract.balanceOfUnderlying(event.params.owner);
+    owner.lastAction = event.block.number;
+    owner.save();
+  }
+
+  let spender = Account.load(event.params.spender.toHex());
+  if (spender === null) {
+    spender = new Account(event.params.spender.toHex());
+    spender.totalInterestEarned = BigInt.fromI32(0);
+    spender.balance = contract.balanceOf(event.params.spender);
+    spender.balanceUnderlying = contract.balanceOfUnderlying(event.params.spender);
+    spender.lastAction = event.block.number;
+    spender.save();
+  }
+
+  entity.owner = owner.id;
+  entity.spender = spender.id;
   entity.value = event.params.value;
   entity.save();
 
@@ -109,7 +133,19 @@ export function handleMint(event: MintEvent): void {
   let entity = new Mint(
     event.transaction.hash.toHex() + '-' + event.logIndex.toString()
   );
-  entity.minter = event.params.minter;
+
+  let minter = Account.load(event.params.minter.toHex());
+  if (minter === null) {
+    let contract = DharmaDai.bind(event.address);
+    minter = new Account(event.params.minter.toHex());
+    minter.totalInterestEarned = BigInt.fromI32(0);
+    minter.balance = contract.balanceOf(event.params.minter);
+    minter.balanceUnderlying = contract.balanceOfUnderlying(event.params.minter);
+    minter.lastAction = event.block.number;
+    minter.save();
+  }
+
+  entity.minter = minter.id;
   entity.dai = event.params.mintAmount;
   entity.dDai = event.params.mintDTokens;
   entity.save();
@@ -127,7 +163,19 @@ export function handleRedeem(event: RedeemEvent): void {
   let entity = new Redeem(
     event.transaction.hash.toHex() + '-' + event.logIndex.toString()
   );
-  entity.redeemer = event.params.redeemer;
+
+  let redeemer = Account.load(event.params.redeemer.toHex());
+  if (redeemer === null) {
+    let contract = DharmaDai.bind(event.address);
+    redeemer = new Account(event.params.redeemer.toHex());
+    redeemer.totalInterestEarned = BigInt.fromI32(0);
+    redeemer.balance = contract.balanceOf(event.params.redeemer);
+    redeemer.balanceUnderlying = contract.balanceOfUnderlying(event.params.redeemer);
+    redeemer.lastAction = event.block.number;
+    redeemer.save();
+  }
+
+  entity.redeemer = redeemer.id;
   entity.dai = event.params.redeemAmount;
   entity.dDai = event.params.redeemDTokens;
   entity.save();
