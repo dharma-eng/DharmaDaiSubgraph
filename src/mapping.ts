@@ -17,14 +17,31 @@ import {
   Summary,
   Account,
 } from '../generated/schema';
-import { BigInt, ByteArray, Bytes, Address, log } from '@graphprotocol/graph-ts';
+import { BigInt, ByteArray, Bytes, Address, log, EthereumBlock } from '@graphprotocol/graph-ts';
 
 // Block Handlers
-//export function handleBlock(block: EthereumBlock): void {
-//  let id = block.hash.toHex()
-//  let entity = new Block(id)
-//  entity.save()
-//}
+export function handleBlock(block: EthereumBlock): void {
+  let contract = DharmaDai.bind(Address.fromString(
+    "0x00000000001876eB1444c986fD502e618c587430"
+  ));
+  let entity = new Summary(block.number.toString());
+  entity.version = contract.getVersion();
+  entity.totalSupply = contract.totalSupply();
+  entity.totalSupplyUnderlying = contract.totalSupplyUnderlying();
+  entity.exchangeRate = contract.exchangeRateCurrent();
+  entity.supplyRatePerBlock = contract.supplyRatePerBlock();
+  entity.lastAccrual = contract.accrualBlockNumber();
+  entity.spreadPerBlock = contract.getSpreadPerBlock();
+  entity.currentCDaiSurplus = contract.getSurplus();
+  entity.currentDaiSurplus = contract.getSurplusUnderlying();
+  
+  // TODO
+  entity.cumulativeCDaiSurplus = BigInt.fromI32(0);
+  entity.cumulativeDaiSurplus = BigInt.fromI32(0);
+  entity.totalInterestEarned = BigInt.fromI32(0);
+
+  entity.save()
+}
 
 // Event Handlers
 export function handleTransfer(event: TransferEvent): void {

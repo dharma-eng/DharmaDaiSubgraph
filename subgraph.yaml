@@ -25,8 +25,8 @@ dataSources:
       abis:
         - name: DharmaDai
           file: ./abis/DharmaDai.json
-      #blockHandlers:
-      #  - handler: handleBlock
+      blockHandlers:
+        - handler: handleBlock
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
