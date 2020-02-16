@@ -51,8 +51,8 @@ type Summary @entity {
   spreadPerBlock: BigInt! # uint256
   currentCDaiSurplus: BigInt! # uint256
   currentDaiSurplus: BigInt! # uint256
-  cumulativeCDaiSurplus: BigInt! # uint256
-  cumulativeDaiSurplus: BigInt! # uint256
+  cumulativeCDaiSurplusPulled: BigInt! # uint256
+  cumulativeDaiSurplusPulled: BigInt! # uint256
 }
 
 type Account @entity {

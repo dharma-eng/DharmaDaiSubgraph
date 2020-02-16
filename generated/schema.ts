@@ -471,22 +471,22 @@ export class Summary extends Entity {
     this.set("currentDaiSurplus", Value.fromBigInt(value));
   }
 
-  get cumulativeCDaiSurplus(): BigInt {
-    let value = this.get("cumulativeCDaiSurplus");
+  get cumulativeCDaiSurplusPulled(): BigInt {
+    let value = this.get("cumulativeCDaiSurplusPulled");
     return value.toBigInt();
   }
 
-  set cumulativeCDaiSurplus(value: BigInt) {
-    this.set("cumulativeCDaiSurplus", Value.fromBigInt(value));
+  set cumulativeCDaiSurplusPulled(value: BigInt) {
+    this.set("cumulativeCDaiSurplusPulled", Value.fromBigInt(value));
   }
 
-  get cumulativeDaiSurplus(): BigInt {
-    let value = this.get("cumulativeDaiSurplus");
+  get cumulativeDaiSurplusPulled(): BigInt {
+    let value = this.get("cumulativeDaiSurplusPulled");
     return value.toBigInt();
   }
 
-  set cumulativeDaiSurplus(value: BigInt) {
-    this.set("cumulativeDaiSurplus", Value.fromBigInt(value));
+  set cumulativeDaiSurplusPulled(value: BigInt) {
+    this.set("cumulativeDaiSurplusPulled", Value.fromBigInt(value));
   }
 }
 

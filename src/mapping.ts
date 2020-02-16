@@ -35,10 +35,16 @@ export function handleBlock(block: EthereumBlock): void {
   entity.currentCDaiSurplus = contract.getSurplus();
   entity.currentDaiSurplus = contract.getSurplusUnderlying();
   
-  // TODO
-  entity.cumulativeCDaiSurplus = BigInt.fromI32(0);
-  entity.cumulativeDaiSurplus = BigInt.fromI32(0);
-  entity.totalInterestEarned = BigInt.fromI32(0);
+  let lastEntity = Summary.load((block.number.minus(BigInt.fromI32(1))).toString());
+  if (lastEntity === null) {
+    entity.cumulativeCDaiSurplusPulled = BigInt.fromI32(0);
+    entity.cumulativeDaiSurplusPulled = BigInt.fromI32(0);
+    entity.totalInterestEarned = BigInt.fromI32(0);
+  } else {
+    entity.cumulativeCDaiSurplusPulled = lastEntity.cumulativeCDaiSurplusPulled;
+    entity.cumulativeDaiSurplusPulled = lastEntity.cumulativeDaiSurplusPulled;
+    entity.totalInterestEarned = lastEntity.totalInterestEarned;
+  }
 
   entity.save()
 }
@@ -166,6 +172,10 @@ export function handleMint(event: MintEvent): void {
   entity.dDai = event.params.mintDTokens;
   entity.save();
 
+  // let blockEntity = Summary.load(event.block.number.toString());
+  // blockEntity.totalInterestEarned = ?;
+  // blockEntity.save()
+
   log.debug(
     'tx {} => Mint: minter 0x{}',
     [
@@ -195,6 +205,10 @@ export function handleRedeem(event: RedeemEvent): void {
   entity.dai = event.params.redeemAmount;
   entity.dDai = event.params.redeemDTokens;
   entity.save();
+
+  // let blockEntity = Summary.load(event.block.number.toString());
+  // blockEntity.totalInterestEarned = ?;
+  // blockEntity.save()
 
   log.debug(
     'tx {} => Redeem: redeemer 0x{}',
@@ -228,6 +242,13 @@ export function handleCollectSurplus(event: CollectSurplusEvent): void {
   entity.dai = event.params.surplusAmount;
   entity.cDai = event.params.surplusCTokens;
   entity.save();
+
+  let blockEntity = Summary.load((event.block.number).toString());
+  if (blockEntity !== null) {
+    blockEntity.cumulativeCDaiSurplusPulled = blockEntity.cumulativeCDaiSurplusPulled.plus(event.params.surplusCTokens);
+    blockEntity.cumulativeDaiSurplusPulled = blockEntity.cumulativeDaiSurplusPulled.plus(event.params.surplusAmount);
+    blockEntity.save();
+  }
 
   log.debug(
     'tx {} => CollectSurplus',

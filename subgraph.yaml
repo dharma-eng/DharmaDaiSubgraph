@@ -8,7 +8,7 @@ dataSources:
     source:
       address: '0x00000000001876eB1444c986fD502e618c587430'
       abi: DharmaDai
-      startBlock: 9413736
+      startBlock: 9416867
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
