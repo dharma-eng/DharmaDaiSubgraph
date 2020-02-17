@@ -2,69 +2,83 @@ type Transfer @entity {
   id: ID!
   from: Account! # address
   to: Account! # address
-  value: BigInt! # uint256
-  underlyingAmount: BigInt! # uint256
+  value: BigDecimal!
+  underlyingAmount: BigDecimal!
+  at: Checkpoint!
 }
 
 type Approval @entity {
   id: ID!
   owner: Account! # address
   spender: Account! # address
-  value: BigInt! # uint256
+  value: BigDecimal!
+  at: Checkpoint!
 }
 
 type Mint @entity {
   id: ID!
   minter: Account! # address
-  dai: BigInt! # uint256
-  dDai: BigInt! # uint256
+  dai: BigDecimal!
+  dDai: BigDecimal!
+  at: Checkpoint!
 }
 
 type Redeem @entity {
   id: ID!
   redeemer: Account! # address
-  dai: BigInt! # uint256
-  dDai: BigInt! # uint256
+  dai: BigDecimal!
+  dDai: BigDecimal!
+  at: Checkpoint!
 }
 
 type Accrue @entity {
   id: ID!
-  dDaiExchangeRate: BigInt! # uint256
-  cDaiExchangeRate: BigInt! # uint256
+  dDaiExchangeRate: BigDecimal!
+  cDaiExchangeRate: BigDecimal!
+  at: Checkpoint!
 }
 
 type CollectSurplus @entity {
   id: ID!
-  dai: BigInt! # uint256
-  cDai: BigInt! # uint256
+  dai: BigDecimal! # uint256
+  cDai: BigDecimal! # uint256
+  at: Checkpoint!
 }
 
-type Summary @entity {
+type Checkpoint @entity {
   id: ID! # block number
-  version: BigInt! # uint256
-  totalSupply: BigInt! # uint256
-  totalSupplyUnderlying: BigInt! # uint256
-  exchangeRate: BigInt! # uint256
-  supplyRatePerBlock: BigInt! # uint256
-  totalInterestEarned: BigInt! # uint256
-  lastAccrual: BigInt! # uint256
-  spreadPerBlock: BigInt! # uint256
-  currentCDaiSurplus: BigInt! # uint256
-  currentDaiSurplus: BigInt! # uint256
-  cumulativeCDaiSurplusPulled: BigInt! # uint256
-  cumulativeDaiSurplusPulled: BigInt! # uint256
+  version: Int!
+  totalSupply: BigDecimal!
+  totalSupplyUnderlying: BigDecimal!
+  exchangeRate: BigDecimal!
+  supplyRatePerBlock: BigDecimal!
+  cumulativeMintedDai: BigDecimal!
+  cumulativeRedeemedDai: BigDecimal!
+  lastAccrual: Int!
+  spreadPerBlock: BigDecimal!
+  currentCDaiSurplus: BigDecimal!
+  currentDaiSurplus: BigDecimal!
+  cumulativeCDaiSurplusPulled: BigDecimal!
+  cumulativeDaiSurplusPulled: BigDecimal!
+  cumulativeTransferredDai: BigDecimal!
+  blockNumber: Int!
+  blockTime: Int!
 }
 
 type Account @entity {
   id: ID! # address
-  balance: BigInt! # uint256
-  balanceUnderlying: BigInt! # uint256
-  totalInterestEarned: BigInt! # uint256
+  balance: BigDecimal! #
+  balanceUnderlying: BigDecimal!
+  totalInterestEarned: BigDecimal!
+  totalDaiTransferredIn: BigDecimal!
+  totalDaiTransferredOut: BigDecimal!
+  totalMintedDai: BigDecimal!
+  totalRedeemedDai: BigDecimal!
   transfersIn: [Transfer!]! @derivedFrom(field: "to")
   transfersOut: [Transfer!]! @derivedFrom(field: "from")
   mintEvents: [Mint!]! @derivedFrom(field: "minter")
   redeemEvents: [Redeem!]! @derivedFrom(field: "redeemer")
   allowances: [Approval!]! @derivedFrom(field: "spender")
   approvals: [Approval!]! @derivedFrom(field: "owner")
-  lastAction: BigInt! # uint256
+  lastAction: Checkpoint!
 }

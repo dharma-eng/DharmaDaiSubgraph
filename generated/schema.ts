@@ -60,22 +60,31 @@ export class Transfer extends Entity {
     this.set("to", Value.fromString(value));
   }
 
-  get value(): BigInt {
+  get value(): BigDecimal {
     let value = this.get("value");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set value(value: BigInt) {
-    this.set("value", Value.fromBigInt(value));
+  set value(value: BigDecimal) {
+    this.set("value", Value.fromBigDecimal(value));
   }
 
-  get underlyingAmount(): BigInt {
+  get underlyingAmount(): BigDecimal {
     let value = this.get("underlyingAmount");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set underlyingAmount(value: BigInt) {
-    this.set("underlyingAmount", Value.fromBigInt(value));
+  set underlyingAmount(value: BigDecimal) {
+    this.set("underlyingAmount", Value.fromBigDecimal(value));
+  }
+
+  get at(): string {
+    let value = this.get("at");
+    return value.toString();
+  }
+
+  set at(value: string) {
+    this.set("at", Value.fromString(value));
   }
 }
 
@@ -127,13 +136,22 @@ export class Approval extends Entity {
     this.set("spender", Value.fromString(value));
   }
 
-  get value(): BigInt {
+  get value(): BigDecimal {
     let value = this.get("value");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set value(value: BigInt) {
-    this.set("value", Value.fromBigInt(value));
+  set value(value: BigDecimal) {
+    this.set("value", Value.fromBigDecimal(value));
+  }
+
+  get at(): string {
+    let value = this.get("at");
+    return value.toString();
+  }
+
+  set at(value: string) {
+    this.set("at", Value.fromString(value));
   }
 }
 
@@ -176,22 +194,31 @@ export class Mint extends Entity {
     this.set("minter", Value.fromString(value));
   }
 
-  get dai(): BigInt {
+  get dai(): BigDecimal {
     let value = this.get("dai");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set dai(value: BigInt) {
-    this.set("dai", Value.fromBigInt(value));
+  set dai(value: BigDecimal) {
+    this.set("dai", Value.fromBigDecimal(value));
   }
 
-  get dDai(): BigInt {
+  get dDai(): BigDecimal {
     let value = this.get("dDai");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set dDai(value: BigInt) {
-    this.set("dDai", Value.fromBigInt(value));
+  set dDai(value: BigDecimal) {
+    this.set("dDai", Value.fromBigDecimal(value));
+  }
+
+  get at(): string {
+    let value = this.get("at");
+    return value.toString();
+  }
+
+  set at(value: string) {
+    this.set("at", Value.fromString(value));
   }
 }
 
@@ -234,22 +261,31 @@ export class Redeem extends Entity {
     this.set("redeemer", Value.fromString(value));
   }
 
-  get dai(): BigInt {
+  get dai(): BigDecimal {
     let value = this.get("dai");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set dai(value: BigInt) {
-    this.set("dai", Value.fromBigInt(value));
+  set dai(value: BigDecimal) {
+    this.set("dai", Value.fromBigDecimal(value));
   }
 
-  get dDai(): BigInt {
+  get dDai(): BigDecimal {
     let value = this.get("dDai");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set dDai(value: BigInt) {
-    this.set("dDai", Value.fromBigInt(value));
+  set dDai(value: BigDecimal) {
+    this.set("dDai", Value.fromBigDecimal(value));
+  }
+
+  get at(): string {
+    let value = this.get("at");
+    return value.toString();
+  }
+
+  set at(value: string) {
+    this.set("at", Value.fromString(value));
   }
 }
 
@@ -283,22 +319,31 @@ export class Accrue extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get dDaiExchangeRate(): BigInt {
+  get dDaiExchangeRate(): BigDecimal {
     let value = this.get("dDaiExchangeRate");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set dDaiExchangeRate(value: BigInt) {
-    this.set("dDaiExchangeRate", Value.fromBigInt(value));
+  set dDaiExchangeRate(value: BigDecimal) {
+    this.set("dDaiExchangeRate", Value.fromBigDecimal(value));
   }
 
-  get cDaiExchangeRate(): BigInt {
+  get cDaiExchangeRate(): BigDecimal {
     let value = this.get("cDaiExchangeRate");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set cDaiExchangeRate(value: BigInt) {
-    this.set("cDaiExchangeRate", Value.fromBigInt(value));
+  set cDaiExchangeRate(value: BigDecimal) {
+    this.set("cDaiExchangeRate", Value.fromBigDecimal(value));
+  }
+
+  get at(): string {
+    let value = this.get("at");
+    return value.toString();
+  }
+
+  set at(value: string) {
+    this.set("at", Value.fromString(value));
   }
 }
 
@@ -332,26 +377,35 @@ export class CollectSurplus extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get dai(): BigInt {
+  get dai(): BigDecimal {
     let value = this.get("dai");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set dai(value: BigInt) {
-    this.set("dai", Value.fromBigInt(value));
+  set dai(value: BigDecimal) {
+    this.set("dai", Value.fromBigDecimal(value));
   }
 
-  get cDai(): BigInt {
+  get cDai(): BigDecimal {
     let value = this.get("cDai");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set cDai(value: BigInt) {
-    this.set("cDai", Value.fromBigInt(value));
+  set cDai(value: BigDecimal) {
+    this.set("cDai", Value.fromBigDecimal(value));
+  }
+
+  get at(): string {
+    let value = this.get("at");
+    return value.toString();
+  }
+
+  set at(value: string) {
+    this.set("at", Value.fromString(value));
   }
 }
 
-export class Summary extends Entity {
+export class Checkpoint extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -359,17 +413,17 @@ export class Summary extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Summary entity without an ID");
+    assert(id !== null, "Cannot save Checkpoint entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save Summary entity with non-string ID. " +
+      "Cannot save Checkpoint entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("Summary", id.toString(), this);
+    store.set("Checkpoint", id.toString(), this);
   }
 
-  static load(id: string): Summary | null {
-    return store.get("Summary", id) as Summary | null;
+  static load(id: string): Checkpoint | null {
+    return store.get("Checkpoint", id) as Checkpoint | null;
   }
 
   get id(): string {
@@ -381,112 +435,148 @@ export class Summary extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get version(): BigInt {
+  get version(): i32 {
     let value = this.get("version");
-    return value.toBigInt();
+    return value.toI32();
   }
 
-  set version(value: BigInt) {
-    this.set("version", Value.fromBigInt(value));
+  set version(value: i32) {
+    this.set("version", Value.fromI32(value));
   }
 
-  get totalSupply(): BigInt {
+  get totalSupply(): BigDecimal {
     let value = this.get("totalSupply");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set totalSupply(value: BigInt) {
-    this.set("totalSupply", Value.fromBigInt(value));
+  set totalSupply(value: BigDecimal) {
+    this.set("totalSupply", Value.fromBigDecimal(value));
   }
 
-  get totalSupplyUnderlying(): BigInt {
+  get totalSupplyUnderlying(): BigDecimal {
     let value = this.get("totalSupplyUnderlying");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set totalSupplyUnderlying(value: BigInt) {
-    this.set("totalSupplyUnderlying", Value.fromBigInt(value));
+  set totalSupplyUnderlying(value: BigDecimal) {
+    this.set("totalSupplyUnderlying", Value.fromBigDecimal(value));
   }
 
-  get exchangeRate(): BigInt {
+  get exchangeRate(): BigDecimal {
     let value = this.get("exchangeRate");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set exchangeRate(value: BigInt) {
-    this.set("exchangeRate", Value.fromBigInt(value));
+  set exchangeRate(value: BigDecimal) {
+    this.set("exchangeRate", Value.fromBigDecimal(value));
   }
 
-  get supplyRatePerBlock(): BigInt {
+  get supplyRatePerBlock(): BigDecimal {
     let value = this.get("supplyRatePerBlock");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set supplyRatePerBlock(value: BigInt) {
-    this.set("supplyRatePerBlock", Value.fromBigInt(value));
+  set supplyRatePerBlock(value: BigDecimal) {
+    this.set("supplyRatePerBlock", Value.fromBigDecimal(value));
   }
 
-  get totalInterestEarned(): BigInt {
-    let value = this.get("totalInterestEarned");
-    return value.toBigInt();
+  get cumulativeMintedDai(): BigDecimal {
+    let value = this.get("cumulativeMintedDai");
+    return value.toBigDecimal();
   }
 
-  set totalInterestEarned(value: BigInt) {
-    this.set("totalInterestEarned", Value.fromBigInt(value));
+  set cumulativeMintedDai(value: BigDecimal) {
+    this.set("cumulativeMintedDai", Value.fromBigDecimal(value));
   }
 
-  get lastAccrual(): BigInt {
+  get cumulativeRedeemedDai(): BigDecimal {
+    let value = this.get("cumulativeRedeemedDai");
+    return value.toBigDecimal();
+  }
+
+  set cumulativeRedeemedDai(value: BigDecimal) {
+    this.set("cumulativeRedeemedDai", Value.fromBigDecimal(value));
+  }
+
+  get lastAccrual(): i32 {
     let value = this.get("lastAccrual");
-    return value.toBigInt();
+    return value.toI32();
   }
 
-  set lastAccrual(value: BigInt) {
-    this.set("lastAccrual", Value.fromBigInt(value));
+  set lastAccrual(value: i32) {
+    this.set("lastAccrual", Value.fromI32(value));
   }
 
-  get spreadPerBlock(): BigInt {
+  get spreadPerBlock(): BigDecimal {
     let value = this.get("spreadPerBlock");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set spreadPerBlock(value: BigInt) {
-    this.set("spreadPerBlock", Value.fromBigInt(value));
+  set spreadPerBlock(value: BigDecimal) {
+    this.set("spreadPerBlock", Value.fromBigDecimal(value));
   }
 
-  get currentCDaiSurplus(): BigInt {
+  get currentCDaiSurplus(): BigDecimal {
     let value = this.get("currentCDaiSurplus");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set currentCDaiSurplus(value: BigInt) {
-    this.set("currentCDaiSurplus", Value.fromBigInt(value));
+  set currentCDaiSurplus(value: BigDecimal) {
+    this.set("currentCDaiSurplus", Value.fromBigDecimal(value));
   }
 
-  get currentDaiSurplus(): BigInt {
+  get currentDaiSurplus(): BigDecimal {
     let value = this.get("currentDaiSurplus");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set currentDaiSurplus(value: BigInt) {
-    this.set("currentDaiSurplus", Value.fromBigInt(value));
+  set currentDaiSurplus(value: BigDecimal) {
+    this.set("currentDaiSurplus", Value.fromBigDecimal(value));
   }
 
-  get cumulativeCDaiSurplusPulled(): BigInt {
+  get cumulativeCDaiSurplusPulled(): BigDecimal {
     let value = this.get("cumulativeCDaiSurplusPulled");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set cumulativeCDaiSurplusPulled(value: BigInt) {
-    this.set("cumulativeCDaiSurplusPulled", Value.fromBigInt(value));
+  set cumulativeCDaiSurplusPulled(value: BigDecimal) {
+    this.set("cumulativeCDaiSurplusPulled", Value.fromBigDecimal(value));
   }
 
-  get cumulativeDaiSurplusPulled(): BigInt {
+  get cumulativeDaiSurplusPulled(): BigDecimal {
     let value = this.get("cumulativeDaiSurplusPulled");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set cumulativeDaiSurplusPulled(value: BigInt) {
-    this.set("cumulativeDaiSurplusPulled", Value.fromBigInt(value));
+  set cumulativeDaiSurplusPulled(value: BigDecimal) {
+    this.set("cumulativeDaiSurplusPulled", Value.fromBigDecimal(value));
+  }
+
+  get cumulativeTransferredDai(): BigDecimal {
+    let value = this.get("cumulativeTransferredDai");
+    return value.toBigDecimal();
+  }
+
+  set cumulativeTransferredDai(value: BigDecimal) {
+    this.set("cumulativeTransferredDai", Value.fromBigDecimal(value));
+  }
+
+  get blockNumber(): i32 {
+    let value = this.get("blockNumber");
+    return value.toI32();
+  }
+
+  set blockNumber(value: i32) {
+    this.set("blockNumber", Value.fromI32(value));
+  }
+
+  get blockTime(): i32 {
+    let value = this.get("blockTime");
+    return value.toI32();
+  }
+
+  set blockTime(value: i32) {
+    this.set("blockTime", Value.fromI32(value));
   }
 }
 
@@ -520,31 +610,67 @@ export class Account extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get balance(): BigInt {
+  get balance(): BigDecimal {
     let value = this.get("balance");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set balance(value: BigInt) {
-    this.set("balance", Value.fromBigInt(value));
+  set balance(value: BigDecimal) {
+    this.set("balance", Value.fromBigDecimal(value));
   }
 
-  get balanceUnderlying(): BigInt {
+  get balanceUnderlying(): BigDecimal {
     let value = this.get("balanceUnderlying");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set balanceUnderlying(value: BigInt) {
-    this.set("balanceUnderlying", Value.fromBigInt(value));
+  set balanceUnderlying(value: BigDecimal) {
+    this.set("balanceUnderlying", Value.fromBigDecimal(value));
   }
 
-  get totalInterestEarned(): BigInt {
+  get totalInterestEarned(): BigDecimal {
     let value = this.get("totalInterestEarned");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set totalInterestEarned(value: BigInt) {
-    this.set("totalInterestEarned", Value.fromBigInt(value));
+  set totalInterestEarned(value: BigDecimal) {
+    this.set("totalInterestEarned", Value.fromBigDecimal(value));
+  }
+
+  get totalDaiTransferredIn(): BigDecimal {
+    let value = this.get("totalDaiTransferredIn");
+    return value.toBigDecimal();
+  }
+
+  set totalDaiTransferredIn(value: BigDecimal) {
+    this.set("totalDaiTransferredIn", Value.fromBigDecimal(value));
+  }
+
+  get totalDaiTransferredOut(): BigDecimal {
+    let value = this.get("totalDaiTransferredOut");
+    return value.toBigDecimal();
+  }
+
+  set totalDaiTransferredOut(value: BigDecimal) {
+    this.set("totalDaiTransferredOut", Value.fromBigDecimal(value));
+  }
+
+  get totalMintedDai(): BigDecimal {
+    let value = this.get("totalMintedDai");
+    return value.toBigDecimal();
+  }
+
+  set totalMintedDai(value: BigDecimal) {
+    this.set("totalMintedDai", Value.fromBigDecimal(value));
+  }
+
+  get totalRedeemedDai(): BigDecimal {
+    let value = this.get("totalRedeemedDai");
+    return value.toBigDecimal();
+  }
+
+  set totalRedeemedDai(value: BigDecimal) {
+    this.set("totalRedeemedDai", Value.fromBigDecimal(value));
   }
 
   get transfersIn(): Array<string> {
@@ -601,12 +727,12 @@ export class Account extends Entity {
     this.set("approvals", Value.fromStringArray(value));
   }
 
-  get lastAction(): BigInt {
+  get lastAction(): string {
     let value = this.get("lastAction");
-    return value.toBigInt();
+    return value.toString();
   }
 
-  set lastAction(value: BigInt) {
-    this.set("lastAction", Value.fromBigInt(value));
+  set lastAction(value: string) {
+    this.set("lastAction", Value.fromString(value));
   }
 }

@@ -20,12 +20,15 @@ dataSources:
         - Redeem
         - Accrue
         - CollectSurplus
-        - Summary
+        - Checkpoint
         - Account
       abis:
         - name: DharmaDai
           file: ./abis/DharmaDai.json
       blockHandlers:
+        - handler: handleBlockOnCall
+          filter:
+            kind: call
         - handler: handleBlock
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
