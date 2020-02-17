@@ -147,18 +147,22 @@ export function handleTransfer(event: TransferEvent): void {
     event.transaction.hash.toHex() + '-' + event.logIndex.toString()
   );
 
+  let contract = DharmaDai.bind(event.address);
+  let exchangeRate = (contract.exchangeRateCurrent().toBigDecimal()).div(twentyEightDecimals);
+
   checkpoint(event.block);
   let blockEntity = Checkpoint.load(event.block.number.toString());
   if (
     event.params.from.toHex() === "0x0000000000000000000000000000000000000000" &&
     event.params.to.toHex() === "0x0000000000000000000000000000000000000000"
   ) {
-    blockEntity.cumulativeTransferredDai = (blockEntity.cumulativeTransferredDai).plus(event.params.value.toBigDecimal()).div(eightDecimals);
+    blockEntity.cumulativeTransferredDai = (blockEntity.cumulativeTransferredDai).plus(
+      (
+        (event.params.value.toBigDecimal().div(eightDecimals)).times(exchangeRate)
+      ).truncate(18)
+    );
     blockEntity.save();
   }
-
-  let contract = DharmaDai.bind(event.address);
-  let exchangeRate = (contract.exchangeRateCurrent().toBigDecimal()).div(twentyEightDecimals);
 
   let accountIn = Account.load(event.params.to.toHex());
   if (accountIn === null) {
@@ -167,7 +171,9 @@ export function handleTransfer(event: TransferEvent): void {
     if (event.params.from.toHex() === "0x0000000000000000000000000000000000000000") {
       accountIn.totalDaiTransferredIn = BigDecimal.fromString("0");
     } else {
-      accountIn.totalDaiTransferredIn = (event.params.value.toBigDecimal()).div(eightDecimals);
+      accountIn.totalDaiTransferredIn = (
+        (event.params.value.toBigDecimal().div(eightDecimals)).times(exchangeRate)
+      ).truncate(18);
     }
     accountIn.totalDaiTransferredOut = BigDecimal.fromString("0");
     accountIn.totalMintedDai = BigDecimal.fromString("0");
@@ -181,7 +187,10 @@ export function handleTransfer(event: TransferEvent): void {
       ).truncate(18)
     );
     if (event.params.from.toHex() !== "0x0000000000000000000000000000000000000000") {
-      accountIn.totalDaiTransferredIn = (accountIn.totalDaiTransferredIn).plus(event.params.value.toBigDecimal()).div(eightDecimals);
+      accountIn.totalDaiTransferredIn = (accountIn.totalDaiTransferredIn).plus((
+          (event.params.value.toBigDecimal().div(eightDecimals)).times(exchangeRate)
+        ).truncate(18)
+      );
     }
   }
 
@@ -198,7 +207,9 @@ export function handleTransfer(event: TransferEvent): void {
     if (event.params.to.toHex() === "0x0000000000000000000000000000000000000000") {
       accountOut.totalDaiTransferredOut = BigDecimal.fromString("0");
     } else {
-      accountOut.totalDaiTransferredOut = (event.params.value.toBigDecimal()).div(eightDecimals);
+      accountOut.totalDaiTransferredOut = (
+        (event.params.value.toBigDecimal().div(eightDecimals)).times(exchangeRate)
+      ).truncate(18)
     }
     accountOut.totalMintedDai = BigDecimal.fromString("0");
     accountOut.totalRedeemedDai = BigDecimal.fromString("0");
@@ -211,7 +222,11 @@ export function handleTransfer(event: TransferEvent): void {
       ).truncate(18)
     );
     if (event.params.to.toHex() !== "0x0000000000000000000000000000000000000000") {
-      accountOut.totalDaiTransferredOut = (accountOut.totalDaiTransferredOut).plus(event.params.value.toBigDecimal()).div(eightDecimals);
+      accountOut.totalDaiTransferredOut = (accountOut.totalDaiTransferredOut).plus(
+        (
+          (event.params.value.toBigDecimal().div(eightDecimals)).times(exchangeRate)
+        ).truncate(18)
+      );
     }
   }
 
@@ -318,7 +333,9 @@ export function handleMint(event: MintEvent): void {
     minter.balanceUnderlying = (contract.balanceOfUnderlying(event.params.minter).toBigDecimal()).div(eighteenDecimals);
     minter.lastAction = blockEntity.id;
   } else {
-    minter.totalMintedDai = (minter.totalMintedDai).plus(event.params.mintAmount.toBigDecimal()).div(eighteenDecimals);
+    minter.totalMintedDai = (minter.totalMintedDai).plus(
+      (event.params.mintAmount.toBigDecimal().div(eighteenDecimals)).truncate(18)
+    );
   }
   minter.save();
 
@@ -363,7 +380,9 @@ export function handleRedeem(event: RedeemEvent): void {
     redeemer.balanceUnderlying = (contract.balanceOfUnderlying(event.params.redeemer).toBigDecimal()).div(eighteenDecimals);
     redeemer.lastAction = blockEntity.id;
   } else {
-    redeemer.totalRedeemedDai = (redeemer.totalRedeemedDai).plus(event.params.redeemAmount.toBigDecimal()).div(eighteenDecimals);
+    redeemer.totalRedeemedDai = (redeemer.totalRedeemedDai).plus(
+      (event.params.redeemAmount.toBigDecimal().div(eighteenDecimals)).truncate(18)
+    );
   }
   redeemer.save();
 

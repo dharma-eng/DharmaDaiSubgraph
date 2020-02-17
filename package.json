@@ -4,10 +4,10 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ 0age/dharmadai",
-    "create-local": "graph create --node http://localhost:8020/ 0age/dharmadai",
-    "remove-local": "graph remove --node http://localhost:8020/ 0age/dharmadai",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 0age/dharmadai"
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ 0age/dharma-dai-subgraph",
+    "create-local": "graph create --node http://localhost:8020/ 0age/dharma-dai-subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ 0age/dharma-dai-subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 0age/dharma-dai-subgraph"
   },
   "dependencies": {
     "@graphprotocol/graph-ts": "0.17.0",
