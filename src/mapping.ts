@@ -238,7 +238,7 @@ export function handleTransfer(event: TransferEvent): void {
   entity.from = accountOut.id;
   entity.to = accountIn.id;
   entity.value = (event.params.value.toBigDecimal()).div(eightDecimals);
-  entity.underlyingAmount = (event.params.value.toBigDecimal()).times(exchangeRate);
+  entity.underlyingAmount = ((event.params.value.toBigDecimal()).div(eightDecimals)).times(exchangeRate);
 
   entity.at = blockEntity.id;
   entity.save();
