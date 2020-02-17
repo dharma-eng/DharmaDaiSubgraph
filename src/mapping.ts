@@ -187,7 +187,8 @@ export function handleTransfer(event: TransferEvent): void {
       ).truncate(18)
     );
     if (event.params.from.toHex() != "0x0000000000000000000000000000000000000000") {
-      accountIn.totalDaiTransferredIn = (accountIn.totalDaiTransferredIn).plus((
+      accountIn.totalDaiTransferredIn = (accountIn.totalDaiTransferredIn).plus(
+        (
           (event.params.value.toBigDecimal().div(eightDecimals)).times(exchangeRate)
         ).truncate(18)
       );
@@ -238,18 +239,21 @@ export function handleTransfer(event: TransferEvent): void {
   entity.from = accountOut.id;
   entity.to = accountIn.id;
   entity.value = (event.params.value.toBigDecimal()).div(eightDecimals);
-  entity.underlyingAmount = ((event.params.value.toBigDecimal()).div(eightDecimals)).times(exchangeRate);
+  entity.underlyingAmount = (
+    ((event.params.value.toBigDecimal()).div(eightDecimals)).times(exchangeRate)
+  ).truncate(18);
 
   entity.at = blockEntity.id;
   entity.save();
 
   log.debug(
-    'tx {} => Transfer: from 0x{} to 0x{} => {} dDai',
+    'tx {} => Transfer: from 0x{} to 0x{} => {} dDai ({} dai equivalent)',
     [
       event.transaction.hash.toHexString(),
       event.params.from.toHex().slice(2).padStart(40, '0'),
       event.params.to.toHex().slice(2).padStart(40, '0').toString(),
-      (event.params.value.toBigDecimal()).div(eightDecimals).toString(),
+      entity.value.toString(),
+      entity.underlyingAmount.toString(),
     ]
   );
 }
@@ -305,7 +309,7 @@ export function handleApproval(event: ApprovalEvent): void {
       event.transaction.hash.toHexString(),
       event.params.owner.toHex().slice(2).padStart(40, '0'),
       event.params.spender.toHex().slice(2).padStart(40, '0'),
-      (event.params.value.toBigDecimal()).div(eightDecimals).toString(),
+      entity.value.toString(),
     ]
   );
 }
@@ -351,8 +355,8 @@ export function handleMint(event: MintEvent): void {
     [
       event.transaction.hash.toHexString(),
       event.params.minter.toHex().slice(2).padStart(40, '0'),
-      (event.params.mintDTokens.toBigDecimal()).div(eightDecimals).toString(),
-      (event.params.mintAmount.toBigDecimal()).div(eighteenDecimals).toString(),
+      entity.dDai.toString(),
+      entity.dai.toString(),
     ]
   );
 }
@@ -398,8 +402,8 @@ export function handleRedeem(event: RedeemEvent): void {
     [
       event.transaction.hash.toHexString(),
       event.params.redeemer.toHex().slice(2).padStart(40, '0'),
-      (event.params.redeemDTokens.toBigDecimal()).div(eightDecimals).toString(),
-      (event.params.redeemAmount.toBigDecimal()).div(eighteenDecimals).toString(),
+      entity.dDai.toString(),
+      entity.dai.toString(),
     ]
   );
 }
@@ -422,8 +426,8 @@ export function handleAccrue(event: AccrueEvent): void {
     'tx {} => Accrue => dDai rate {} & cDai rate {}',
     [
       event.transaction.hash.toHexString(),
-      (event.params.dTokenExchangeRate.toBigDecimal()).div(twentyEightDecimals).toString(),
-      (event.params.cTokenExchangeRate.toBigDecimal()).div(twentyEightDecimals).toString(),
+      entity.dDaiExchangeRate.toString(),
+      entity.cDaiExchangeRate.toString(),
     ]
   );
 }
@@ -446,9 +450,11 @@ export function handleCollectSurplus(event: CollectSurplusEvent): void {
   entity.save();
 
   log.debug(
-    'tx {} => CollectSurplus',
+    'tx {} => CollectSurplus => {} cDai ({} dai equivalent)',
     [
       event.transaction.hash.toHexString(),
+      entity.cDai.toString(),
+      entity.dai.toString(),
     ]
   );
 }
