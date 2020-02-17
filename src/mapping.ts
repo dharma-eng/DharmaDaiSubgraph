@@ -153,8 +153,8 @@ export function handleTransfer(event: TransferEvent): void {
   checkpoint(event.block);
   let blockEntity = Checkpoint.load(event.block.number.toString());
   if (
-    event.params.from.toHex() === "0x0000000000000000000000000000000000000000" &&
-    event.params.to.toHex() === "0x0000000000000000000000000000000000000000"
+    event.params.from.toHex() !== "0x0000000000000000000000000000000000000000" &&
+    event.params.to.toHex() !== "0x0000000000000000000000000000000000000000"
   ) {
     blockEntity.cumulativeTransferredDai = (blockEntity.cumulativeTransferredDai).plus(
       (
