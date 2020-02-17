@@ -153,8 +153,8 @@ export function handleTransfer(event: TransferEvent): void {
   checkpoint(event.block);
   let blockEntity = Checkpoint.load(event.block.number.toString());
   if (
-    event.params.from.toHex() !== "0x0000000000000000000000000000000000000000" &&
-    event.params.to.toHex() !== "0x0000000000000000000000000000000000000000"
+    event.params.from.toHex() != "0x0000000000000000000000000000000000000000" &&
+    event.params.to.toHex() != "0x0000000000000000000000000000000000000000"
   ) {
     blockEntity.cumulativeTransferredDai = (blockEntity.cumulativeTransferredDai).plus(
       (
@@ -168,7 +168,7 @@ export function handleTransfer(event: TransferEvent): void {
   if (accountIn === null) {
     accountIn = new Account(event.params.to.toHex());
     accountIn.totalInterestEarned = BigDecimal.fromString("0");
-    if (event.params.from.toHex() === "0x0000000000000000000000000000000000000000") {
+    if (event.params.from.toHex() == "0x0000000000000000000000000000000000000000") {
       accountIn.totalDaiTransferredIn = BigDecimal.fromString("0");
     } else {
       accountIn.totalDaiTransferredIn = (
@@ -186,7 +186,7 @@ export function handleTransfer(event: TransferEvent): void {
         ).minus(accountIn.balanceUnderlying)
       ).truncate(18)
     );
-    if (event.params.from.toHex() !== "0x0000000000000000000000000000000000000000") {
+    if (event.params.from.toHex() != "0x0000000000000000000000000000000000000000") {
       accountIn.totalDaiTransferredIn = (accountIn.totalDaiTransferredIn).plus((
           (event.params.value.toBigDecimal().div(eightDecimals)).times(exchangeRate)
         ).truncate(18)
@@ -204,7 +204,7 @@ export function handleTransfer(event: TransferEvent): void {
     accountOut = new Account(event.params.from.toHex());
     accountOut.totalInterestEarned = BigDecimal.fromString("0");
     accountOut.totalDaiTransferredIn = BigDecimal.fromString("0");
-    if (event.params.to.toHex() === "0x0000000000000000000000000000000000000000") {
+    if (event.params.to.toHex() == "0x0000000000000000000000000000000000000000") {
       accountOut.totalDaiTransferredOut = BigDecimal.fromString("0");
     } else {
       accountOut.totalDaiTransferredOut = (
@@ -221,7 +221,7 @@ export function handleTransfer(event: TransferEvent): void {
         ).minus(accountOut.balanceUnderlying)
       ).truncate(18)
     );
-    if (event.params.to.toHex() !== "0x0000000000000000000000000000000000000000") {
+    if (event.params.to.toHex() != "0x0000000000000000000000000000000000000000") {
       accountOut.totalDaiTransferredOut = (accountOut.totalDaiTransferredOut).plus(
         (
           (event.params.value.toBigDecimal().div(eightDecimals)).times(exchangeRate)
