@@ -8,6 +8,9 @@ import {
   CollectSurplus as CollectSurplusEvent,
 } from '../generated/DharmaDai/DharmaDai';
 import {
+  DharmaDaiSummarizer,
+} from '../generated/DharmaDaiSummarizer/DharmaDaiSummarizer';
+import {
   Transfer,
   Approval,
   Mint,
@@ -34,9 +37,21 @@ function basicCheckpoint(block: EthereumBlock): void {
       checkpoint(block);
     } else {
       entity = new Checkpoint(block.number.toString())
-      entity.exchangeRate = (contract.exchangeRateCurrent().toBigDecimal()).div(twentyEightDecimals);
-      entity.supplyRatePerBlock = (contract.supplyRatePerBlock().toBigDecimal()).div(eighteenDecimals);
-      entity.currentDaiSurplus = (contract.getSurplusUnderlying().toBigDecimal()).div(eighteenDecimals);
+
+      if ((block.number).toI32() > 9498304) {
+        let summarizer = DharmaDaiSummarizer.bind(Address.fromString(
+          "0x45a59cF7985817036A500cb77707137AF7a5B429"
+        ));
+
+        let summary = summarizer.brieflySummarizeAsArray();
+        entity.exchangeRate = (summary[0].toBigDecimal()).div(twentyEightDecimals);
+        entity.supplyRatePerBlock = (summary[1].toBigDecimal()).div(eighteenDecimals);
+        entity.currentDaiSurplus = (summary[2].toBigDecimal()).div(eighteenDecimals);        
+      } else {
+        entity.exchangeRate = (contract.exchangeRateCurrent().toBigDecimal()).div(twentyEightDecimals);
+        entity.supplyRatePerBlock = (contract.supplyRatePerBlock().toBigDecimal()).div(eighteenDecimals);
+        entity.currentDaiSurplus = (contract.getSurplusUnderlying().toBigDecimal()).div(eighteenDecimals);
+      }
 
       entity.totalSupply = lastEntity.totalSupply;
       entity.totalSupplyUnderlying = ((entity.totalSupply).times(entity.exchangeRate)).truncate(18);
@@ -66,15 +81,35 @@ function checkpoint(block: EthereumBlock): void {
   let entity = Checkpoint.load(block.number.toString());
   if (entity === null) {
     entity = new Checkpoint(block.number.toString())
-    entity.version = (contract.getVersion()).toI32();
-    entity.totalSupply = (contract.totalSupply().toBigDecimal()).div(eightDecimals);
-    entity.totalSupplyUnderlying = (contract.totalSupplyUnderlying().toBigDecimal()).div(eighteenDecimals);
-    entity.exchangeRate = (contract.exchangeRateCurrent().toBigDecimal()).div(twentyEightDecimals);
-    entity.supplyRatePerBlock = (contract.supplyRatePerBlock().toBigDecimal()).div(eighteenDecimals);
-    entity.lastAccrual = (contract.accrualBlockNumber()).toI32();
-    entity.spreadPerBlock = (contract.getSpreadPerBlock().toBigDecimal()).div(eighteenDecimals);
-    entity.currentCDaiSurplus = (contract.getSurplus().toBigDecimal()).div(eightDecimals);
-    entity.currentDaiSurplus = (contract.getSurplusUnderlying().toBigDecimal()).div(eighteenDecimals);
+
+    if ((block.number).toI32() > 9498304) {
+      let summarizer = DharmaDaiSummarizer.bind(Address.fromString(
+        "0x45a59cF7985817036A500cb77707137AF7a5B429"
+      ));
+
+      let summary = summarizer.summarizeAsArray();
+
+      entity.version = summary[0].toI32();
+      entity.totalSupply = (summary[1].toBigDecimal()).div(eightDecimals);
+      entity.totalSupplyUnderlying = (summary[2].toBigDecimal()).div(eighteenDecimals);
+      entity.exchangeRate = (summary[3].toBigDecimal()).div(twentyEightDecimals);
+      entity.supplyRatePerBlock = (summary[4].toBigDecimal()).div(eighteenDecimals);
+      entity.lastAccrual = summary[5].toI32();
+      entity.spreadPerBlock = (summary[6].toBigDecimal()).div(eighteenDecimals);
+      entity.currentCDaiSurplus = (summary[7].toBigDecimal()).div(eightDecimals);
+      entity.currentDaiSurplus = (summary[8].toBigDecimal()).div(eighteenDecimals);   
+    } else {
+      entity.version = (contract.getVersion()).toI32();
+      entity.totalSupply = (contract.totalSupply().toBigDecimal()).div(eightDecimals);
+      entity.totalSupplyUnderlying = (contract.totalSupplyUnderlying().toBigDecimal()).div(eighteenDecimals);
+      entity.exchangeRate = (contract.exchangeRateCurrent().toBigDecimal()).div(twentyEightDecimals);
+      entity.supplyRatePerBlock = (contract.supplyRatePerBlock().toBigDecimal()).div(eighteenDecimals);
+      entity.lastAccrual = (contract.accrualBlockNumber()).toI32();
+      entity.spreadPerBlock = (contract.getSpreadPerBlock().toBigDecimal()).div(eighteenDecimals);
+      entity.currentCDaiSurplus = (contract.getSurplus().toBigDecimal()).div(eightDecimals);
+      entity.currentDaiSurplus = (contract.getSurplusUnderlying().toBigDecimal()).div(eighteenDecimals);
+    }
+
     entity.blockNumber = (block.number).toI32();
     entity.blockTime = (block.timestamp).toI32();
     

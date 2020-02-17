@@ -25,6 +25,8 @@ dataSources:
       abis:
         - name: DharmaDai
           file: ./abis/DharmaDai.json
+        - name: DharmaDaiSummarizer
+          file: ./abis/DharmaDaiSummarizer.json
       blockHandlers:
         - handler: handleBlockOnCall
           filter:
@@ -44,3 +46,24 @@ dataSources:
         - event: CollectSurplus(uint256,uint256)
           handler: handleCollectSurplus
       file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: DharmaDaiSummarizer
+    network: mainnet
+    source:
+      address: '0x45a59cF7985817036A500cb77707137AF7a5B429'
+      abi: DharmaDaiSummarizer
+      startBlock: 9498304
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      abis:
+        - name: DharmaDaiSummarizer
+          file: ./abis/DharmaDaiSummarizer.json
+      entities:
+        - Checkpoint
+      blockHandlers:
+        - handler: handleBlockOnCall
+          filter:
+            kind: call
+      file: ./src/summarizerMapping.ts
