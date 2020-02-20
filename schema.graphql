@@ -54,6 +54,7 @@ type Checkpoint @entity {
   supplyRatePerBlock: BigDecimal!
   cumulativeMintedDai: BigDecimal!
   cumulativeRedeemedDai: BigDecimal!
+  cumulativeInterestEarned: BigDecimal!
   lastAccrual: Int!
   spreadPerBlock: BigDecimal!
   currentCDaiSurplus: BigDecimal!

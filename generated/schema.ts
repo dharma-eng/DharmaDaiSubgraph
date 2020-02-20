@@ -498,6 +498,15 @@ export class Checkpoint extends Entity {
     this.set("cumulativeRedeemedDai", Value.fromBigDecimal(value));
   }
 
+  get cumulativeInterestEarned(): BigDecimal {
+    let value = this.get("cumulativeInterestEarned");
+    return value.toBigDecimal();
+  }
+
+  set cumulativeInterestEarned(value: BigDecimal) {
+    this.set("cumulativeInterestEarned", Value.fromBigDecimal(value));
+  }
+
   get lastAccrual(): i32 {
     let value = this.get("lastAccrual");
     return value.toI32();
