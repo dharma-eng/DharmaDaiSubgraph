@@ -386,6 +386,7 @@ export function handleApproval(event: ApprovalEvent): void {
   allowanceEntity.owner = owner.id;
   allowanceEntity.spender = spender.id;
   allowanceEntity.value = (event.params.value.toBigDecimal()).div(eightDecimals);
+  allowanceEntity.save();
 
   entity.at = blockEntity.id;
   entity.save();
