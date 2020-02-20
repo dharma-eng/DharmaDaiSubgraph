@@ -22,6 +22,7 @@ dataSources:
         - CollectSurplus
         - Checkpoint
         - Account
+        - Allowance
       abis:
         - name: DharmaDai
           file: ./abis/DharmaDai.json

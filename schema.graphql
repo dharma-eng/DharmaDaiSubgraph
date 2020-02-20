@@ -61,6 +61,10 @@ type Checkpoint @entity {
   cumulativeCDaiSurplusPulled: BigDecimal!
   cumulativeDaiSurplusPulled: BigDecimal!
   cumulativeTransferredDai: BigDecimal!
+  mints: Int!
+  redeems: Int!
+  transfers: Int!
+  holders: Int!
   blockNumber: Int!
   blockTime: Int!
 }
@@ -74,11 +78,24 @@ type Account @entity {
   totalDaiTransferredOut: BigDecimal!
   totalMintedDai: BigDecimal!
   totalRedeemedDai: BigDecimal!
+  numberOfMints: Int!
+  numberOfRedeems: Int!
+  numberOfTransfersIn: Int!
+  numberOfTransfersOut: Int!
   transfersIn: [Transfer!]! @derivedFrom(field: "to")
   transfersOut: [Transfer!]! @derivedFrom(field: "from")
   mintEvents: [Mint!]! @derivedFrom(field: "minter")
   redeemEvents: [Redeem!]! @derivedFrom(field: "redeemer")
-  allowances: [Approval!]! @derivedFrom(field: "spender")
-  approvals: [Approval!]! @derivedFrom(field: "owner")
+  allowances: [Allowance!]! @derivedFrom(field: "spender")
+  approvals: [Allowance!]! @derivedFrom(field: "owner")
+  approvalEventsAsSpender: [Approval!]! @derivedFrom(field: "spender")
+  approvalEventsAsOwner: [Approval!]! @derivedFrom(field: "owner")
   lastAction: Checkpoint!
+}
+
+type Allowance @entity {
+  id: ID!
+  owner: Account! # address
+  spender: Account! # address
+  value: BigDecimal!
 }

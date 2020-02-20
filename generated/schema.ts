@@ -561,6 +561,42 @@ export class Checkpoint extends Entity {
     this.set("cumulativeTransferredDai", Value.fromBigDecimal(value));
   }
 
+  get mints(): i32 {
+    let value = this.get("mints");
+    return value.toI32();
+  }
+
+  set mints(value: i32) {
+    this.set("mints", Value.fromI32(value));
+  }
+
+  get redeems(): i32 {
+    let value = this.get("redeems");
+    return value.toI32();
+  }
+
+  set redeems(value: i32) {
+    this.set("redeems", Value.fromI32(value));
+  }
+
+  get transfers(): i32 {
+    let value = this.get("transfers");
+    return value.toI32();
+  }
+
+  set transfers(value: i32) {
+    this.set("transfers", Value.fromI32(value));
+  }
+
+  get holders(): i32 {
+    let value = this.get("holders");
+    return value.toI32();
+  }
+
+  set holders(value: i32) {
+    this.set("holders", Value.fromI32(value));
+  }
+
   get blockNumber(): i32 {
     let value = this.get("blockNumber");
     return value.toI32();
@@ -673,6 +709,42 @@ export class Account extends Entity {
     this.set("totalRedeemedDai", Value.fromBigDecimal(value));
   }
 
+  get numberOfMints(): i32 {
+    let value = this.get("numberOfMints");
+    return value.toI32();
+  }
+
+  set numberOfMints(value: i32) {
+    this.set("numberOfMints", Value.fromI32(value));
+  }
+
+  get numberOfRedeems(): i32 {
+    let value = this.get("numberOfRedeems");
+    return value.toI32();
+  }
+
+  set numberOfRedeems(value: i32) {
+    this.set("numberOfRedeems", Value.fromI32(value));
+  }
+
+  get numberOfTransfersIn(): i32 {
+    let value = this.get("numberOfTransfersIn");
+    return value.toI32();
+  }
+
+  set numberOfTransfersIn(value: i32) {
+    this.set("numberOfTransfersIn", Value.fromI32(value));
+  }
+
+  get numberOfTransfersOut(): i32 {
+    let value = this.get("numberOfTransfersOut");
+    return value.toI32();
+  }
+
+  set numberOfTransfersOut(value: i32) {
+    this.set("numberOfTransfersOut", Value.fromI32(value));
+  }
+
   get transfersIn(): Array<string> {
     let value = this.get("transfersIn");
     return value.toStringArray();
@@ -727,6 +799,24 @@ export class Account extends Entity {
     this.set("approvals", Value.fromStringArray(value));
   }
 
+  get approvalEventsAsSpender(): Array<string> {
+    let value = this.get("approvalEventsAsSpender");
+    return value.toStringArray();
+  }
+
+  set approvalEventsAsSpender(value: Array<string>) {
+    this.set("approvalEventsAsSpender", Value.fromStringArray(value));
+  }
+
+  get approvalEventsAsOwner(): Array<string> {
+    let value = this.get("approvalEventsAsOwner");
+    return value.toStringArray();
+  }
+
+  set approvalEventsAsOwner(value: Array<string>) {
+    this.set("approvalEventsAsOwner", Value.fromStringArray(value));
+  }
+
   get lastAction(): string {
     let value = this.get("lastAction");
     return value.toString();
@@ -734,5 +824,63 @@ export class Account extends Entity {
 
   set lastAction(value: string) {
     this.set("lastAction", Value.fromString(value));
+  }
+}
+
+export class Allowance extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Allowance entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Allowance entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Allowance", id.toString(), this);
+  }
+
+  static load(id: string): Allowance | null {
+    return store.get("Allowance", id) as Allowance | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get owner(): string {
+    let value = this.get("owner");
+    return value.toString();
+  }
+
+  set owner(value: string) {
+    this.set("owner", Value.fromString(value));
+  }
+
+  get spender(): string {
+    let value = this.get("spender");
+    return value.toString();
+  }
+
+  set spender(value: string) {
+    this.set("spender", Value.fromString(value));
+  }
+
+  get value(): BigDecimal {
+    let value = this.get("value");
+    return value.toBigDecimal();
+  }
+
+  set value(value: BigDecimal) {
+    this.set("value", Value.fromBigDecimal(value));
   }
 }
