@@ -21,7 +21,7 @@ import {
   Account,
   Allowance,
 } from '../generated/schema';
-import { BigInt, BigDecimal, ByteArray, Bytes, Address, log, EthereumBlock } from '@graphprotocol/graph-ts';
+import { BigInt, BigDecimal, ByteArray, Bytes, Address, log, EthereumBlock, store } from '@graphprotocol/graph-ts';
 
 let eightDecimals = BigDecimal.fromString("100000000");
 let eighteenDecimals = BigDecimal.fromString("1000000000000000000");
@@ -78,6 +78,33 @@ function basicCheckpoint(block: EthereumBlock): void {
           (entity.totalSupplyUnderlying).plus(entity.cumulativeRedeemedDai)
         ).minus(entity.cumulativeMintedDai)
       ).truncate(18);
+
+      if (entity.supplyRatePerBlock.truncate(14) != lastEntity.supplyRatePerBlock.truncate(14)) {
+        entity.estimatedAPR = (
+          entity.supplyRatePerBlock.times(BigDecimal.fromString("210240000")).truncate(4).toString().concat("%")
+        );
+
+        let apyMultiplier = (
+          BigDecimal.fromString("1").plus(
+            BigDecimal.fromString("5760").times(entity.supplyRatePerBlock)
+          )
+        );
+
+        let apyAccumulator = BigDecimal.fromString("1");
+
+        for (let i = 0; i < 365; i++) {
+          apyAccumulator = apyAccumulator.times(apyMultiplier);
+        }
+
+        entity.estimatedAPY = (
+          BigDecimal.fromString("100").times(
+            apyAccumulator.minus(BigDecimal.fromString("1"))
+          ).truncate(4).toString().concat("%")
+        );
+      } else {
+        entity.estimatedAPR = lastEntity.estimatedAPR;
+        entity.estimatedAPY = lastEntity.estimatedAPY;
+      }
 
       entity.blockNumber = (block.number).toI32();
       entity.blockTime = (block.timestamp).toI32();
@@ -136,6 +163,29 @@ function checkpoint(block: EthereumBlock): void {
       entity.redeems = 0;
       entity.transfers = 0;
       entity.holders = 0;
+
+      entity.estimatedAPR = (
+        entity.supplyRatePerBlock.times(BigDecimal.fromString("210240000")).truncate(4).toString().concat("%")
+      );
+
+      let apyMultiplier = (
+        BigDecimal.fromString("1").plus(
+          BigDecimal.fromString("5760").times(entity.supplyRatePerBlock)
+        )
+      );
+
+      let apyAccumulator = BigDecimal.fromString("1");
+
+      for (let i = 0; i < 365; i++) {
+        apyAccumulator = apyAccumulator.times(apyMultiplier);
+      }
+
+      entity.estimatedAPY = (
+        BigDecimal.fromString("100").times(
+          apyAccumulator.minus(BigDecimal.fromString("1"))
+        ).truncate(4).toString().concat("%")
+      );
+
     } else {
       entity.cumulativeCDaiSurplusPulled = lastEntity.cumulativeCDaiSurplusPulled;
       entity.cumulativeDaiSurplusPulled = lastEntity.cumulativeDaiSurplusPulled;
@@ -146,6 +196,33 @@ function checkpoint(block: EthereumBlock): void {
       entity.redeems = lastEntity.redeems;
       entity.transfers = lastEntity.transfers;
       entity.holders = lastEntity.holders;
+
+      if (entity.supplyRatePerBlock != lastEntity.supplyRatePerBlock) {
+        entity.estimatedAPR = (
+          entity.supplyRatePerBlock.times(BigDecimal.fromString("210240000")).truncate(4).toString().concat("%")
+        );
+
+        let apyMultiplier = (
+          BigDecimal.fromString("1").plus(
+            BigDecimal.fromString("5760").times(entity.supplyRatePerBlock)
+          )
+        );
+
+        let apyAccumulator = BigDecimal.fromString("1");
+
+        for (let i = 0; i < 365; i++) {
+          apyAccumulator = apyAccumulator.times(apyMultiplier);
+        }
+
+        entity.estimatedAPY = (
+          BigDecimal.fromString("100").times(
+            apyAccumulator.minus(BigDecimal.fromString("1"))
+          ).truncate(4).toString().concat("%")
+        );
+      } else {
+        entity.estimatedAPR = lastEntity.estimatedAPR;
+        entity.estimatedAPY = lastEntity.estimatedAPY;
+      }
     }
 
     entity.cumulativeInterestEarned = (
@@ -387,6 +464,10 @@ export function handleApproval(event: ApprovalEvent): void {
   allowanceEntity.spender = spender.id;
   allowanceEntity.value = (event.params.value.toBigDecimal()).div(eightDecimals);
   allowanceEntity.save();
+
+  if (allowanceEntity.value == BigDecimal.fromString("0")) {
+    store.remove("Allowance", event.params.owner.toHex() + '-' + event.params.spender.toHex())
+  }
 
   entity.at = blockEntity.id;
   entity.save();

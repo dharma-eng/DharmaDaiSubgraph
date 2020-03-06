@@ -480,6 +480,24 @@ export class Checkpoint extends Entity {
     this.set("supplyRatePerBlock", Value.fromBigDecimal(value));
   }
 
+  get estimatedAPR(): string {
+    let value = this.get("estimatedAPR");
+    return value.toString();
+  }
+
+  set estimatedAPR(value: string) {
+    this.set("estimatedAPR", Value.fromString(value));
+  }
+
+  get estimatedAPY(): string {
+    let value = this.get("estimatedAPY");
+    return value.toString();
+  }
+
+  set estimatedAPY(value: string) {
+    this.set("estimatedAPY", Value.fromString(value));
+  }
+
   get cumulativeMintedDai(): BigDecimal {
     let value = this.get("cumulativeMintedDai");
     return value.toBigDecimal();

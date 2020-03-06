@@ -52,6 +52,8 @@ type Checkpoint @entity {
   totalSupplyUnderlying: BigDecimal!
   exchangeRate: BigDecimal!
   supplyRatePerBlock: BigDecimal!
+  estimatedAPR: String!
+  estimatedAPY: String!
   cumulativeMintedDai: BigDecimal!
   cumulativeRedeemedDai: BigDecimal!
   cumulativeInterestEarned: BigDecimal!
