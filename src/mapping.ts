@@ -440,6 +440,20 @@ export function handleMint(event: MintEvent): void {
       (event.params.mintAmount.toBigDecimal().div(eighteenDecimals)).truncate(18)
     );
     minter.numberOfMints = minter.numberOfMints + 1;
+
+    let contract = DharmaDai.bind(event.address);
+
+    minter.balanceUnderlying = (contract.balanceOfUnderlying(event.params.minter).toBigDecimal()).div(eighteenDecimals);
+
+    minter.totalInterestEarned = (
+      (
+        minter.balanceUnderlying.plus(
+          minter.totalRedeemedDai.plus(minter.totalDaiTransferredOut)
+        )
+      ).minus(
+        minter.totalMintedDai.plus(minter.totalDaiTransferredIn)
+      )
+    ).truncate(18);
   }
   minter.save();
 
@@ -485,6 +499,20 @@ export function handleRedeem(event: RedeemEvent): void {
       (event.params.redeemAmount.toBigDecimal().div(eighteenDecimals)).truncate(18)
     );
     redeemer.numberOfRedeems = redeemer.numberOfRedeems + 1;
+
+    let contract = DharmaDai.bind(event.address);
+
+    redeemer.balanceUnderlying = (contract.balanceOfUnderlying(event.params.redeemer).toBigDecimal()).div(eighteenDecimals);
+
+    redeemer.totalInterestEarned = (
+      (
+        redeemer.balanceUnderlying.plus(
+          redeemer.totalRedeemedDai.plus(redeemer.totalDaiTransferredOut)
+        )
+      ).minus(
+        redeemer.totalMintedDai.plus(redeemer.totalDaiTransferredIn)
+      )
+    ).truncate(18);
   }
   redeemer.save();
 
