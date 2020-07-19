@@ -11,6 +11,6 @@
   },
   "dependencies": {
     "@graphprotocol/graph-ts": "0.17.0",
-    "lodash": "4.17.13"
+    "lodash": "4.17.19"
   }
 }
